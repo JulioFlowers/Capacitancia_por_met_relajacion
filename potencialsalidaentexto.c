@@ -15,8 +15,6 @@ void guardarArrayEnArchivo(int filas, int columnas, double array[filas][columnas
         return;
     }
 
-    // Escribir las dimensiones del array en la primera línea
-    fprintf(archivo, "%d %d\n", filas, columnas);
 
     // Escribir los elementos del array
     for (int i = 0; i < filas; i++) {
