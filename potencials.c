@@ -28,11 +28,11 @@ void guardarArrayEnArchivo(int filas, int columnas, double array[filas][columnas
 
 
 
-int main() {
+void main() {
 
 double phi[N][M];
 double phinuevo[N][N];
- int i, j, iter, cuad, esp;
+int i, j, iter, cuad, esp;
 cuad = N/5;
 esp = cuad/2;
 
@@ -48,13 +48,11 @@ for (i = 0; i < N; i++) {
             else {  
                 phi[i][j]=1.6;
                 }
-            }
-
-            
+            }       
         }
 
 guardarArrayEnArchivo(N, M, phi, "miArchivo.txt");
 
-return 0;
+return;
 }
 
