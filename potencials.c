@@ -28,7 +28,7 @@ void guardarArrayEnArchivo(int filas, int columnas, double array[filas][columnas
 
 
 
-int main() {
+void main() {
 
 double phi[N][M];
 double phinuevo[N][M];
