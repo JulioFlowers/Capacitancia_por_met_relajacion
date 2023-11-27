@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#define N 200
-#define M 280
+#define N 1800
+#define M 2470
 #define MAX_ITER 15000
 #define TOL 1e-6
 
@@ -27,24 +27,21 @@ void guardarArrayEnArchivo(int filas, int columnas, double array[filas][columnas
     fclose(archivo);
 }
 
-
-
 int main() {
 
 double phi[N][M];
-double phinuevo[N][N];
+double phinuevo[N][M];
  int i, j, iter, cuad, esp;
-cuad = N/5;
-esp = cuad/2;
-
+cuad = 390;
+esp = 130;
 
 for (i = 0; i < N; i++) {
         for (j = 0; j < M; j++) {
-            if (j<=cuad && i<=4*cuad || j<=3*cuad && i>=4*cuad ||j>=6*cuad && i<=4*cuad || j>=4*cuad && i>=4*cuad || j>=3*cuad && j<=4*cuad && i<=cuad ){
-            phi[i][j]= 5.0;      // Voltajes positivos
+            if (j<=esp  ){
+            phi[i][j]= 3.2;      // Voltajes positivos
             }
-            else if (j>= cuad + esp && j<=2*cuad + esp && i<= 2*cuad+esp || j>= 3*(cuad + esp) && j<=4*cuad + 3*esp && i<= 2*cuad+esp || j>= cuad +esp && j<= 5*cuad+esp && i>2*cuad+esp && i<=3*cuad+esp || j>=3*cuad+esp && j<=4*cuad+esp && i>=3*cuad+esp ){
-                  phi[i][j]=-5;       // Voltajes negativos
+            else if (j>=cuad ){
+                  phi[i][j]=0;       // Voltajes negativos
             }
             else {  
                 phi[i][j]=0.0;
