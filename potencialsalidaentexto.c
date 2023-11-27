@@ -28,16 +28,14 @@ void guardarArrayEnArchivo(int filas, int columnas, double array[filas][columnas
 }
 
 int main() {
-
 double phi[N][M];
-double phinuevo[N][M];
- int i, j, iter, cuad, esp;
+
+int i, j, iter, cuad, esp;
 cuad = 390;
 esp = 130;
-
 for (i = 0; i < N; i++) {
         for (j = 0; j < M; j++) {
-            if (j<=esp  ){
+            if (i<=esp || i>esp && i<=1530 && j<=cuad || i>esp && i<=1530 && j<=M-cuad || i>=  ){
             phi[i][j]= 3.2;      // Voltajes positivos
             }
             else if (j>=cuad ){
