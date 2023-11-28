@@ -18,7 +18,7 @@ def archivo_texto_a_matriz(ruta_archivo):
     return matriz
 
 # Ejemplo de uso
-ruta_archivo = 'miArchivo.txt'
+ruta_archivo = 'potencialrust/miArchivo.txt'
 m1 = archivo_texto_a_matriz(ruta_archivo)
 
 print("Matriz:")
