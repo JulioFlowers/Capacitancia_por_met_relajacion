@@ -1,3 +1,5 @@
 .vscode
 potencialrust/target/debug
-.exe
+*.class
+*.sm
+*.exe
