@@ -18,9 +18,10 @@ def archivo_texto_a_matriz(ruta_archivo):
     return matriz
 
 # Ejemplo de uso
-ruta_archivo = 'potencialrust/miArchivo.txt'
+ruta_archivo = 'potencialrust/output.txt'
 m1 = archivo_texto_a_matriz(ruta_archivo)
 
+"""
 print("Matriz:")
 print(m1)
 
@@ -38,12 +39,9 @@ plt.savefig('potcirc.jpg', dpi=500)
 plt.show()
 
 """
-# Read data from the text file
-f = open("mi_archivo.txt")
-data = np.loadtxt(f)
 
 # Create a heatmap using matplotlib
-plt.imshow(data, cmap='viridis', interpolation='nearest')
+plt.imshow(m1, cmap='viridis', interpolation='nearest')
 plt.colorbar(label='Values')  # Add a colorbar for reference
 
 # Add labels to axes
@@ -53,5 +51,5 @@ plt.ylabel('Y-axis')
 # Display the plot
 plt.title('Heatmap from Text File')
 plt.show()
-"""
+
 

@@ -36,7 +36,7 @@ fn main() -> io::Result<()> {
     println!("Matriz exportada exitosamente en {}", nombre_archivo);
 
     Ok(())
-}*/
+}
 
 use std::fs::File;
 use std::io::{self, Write};
@@ -110,5 +110,174 @@ fn main() {
 
     if let Err(err) = guardar_array_en_archivo(N, M, &phi, "miArchivo.txt") {
         eprintln!("Error al guardar en el archivo: {}", err);
+    }
+}
+*/
+use std::fs::File;
+use std::io::{self, Write};
+use rayon::prelude::*;
+
+fn write_matrix_to_file_parallel(matrix: &mut Vec<Vec<f32>>, file_path: &str) -> io::Result<()> {
+    let formatted_rows: Vec<String> = matrix
+        .par_iter_mut()
+        .map(|row| {
+            // Formatear la fila como una cadena separada por tabulaciones
+            row.iter_mut()
+                .map(|num| num.to_string())
+                .collect::<Vec<String>>()
+                .join("\t")
+        })
+        .collect();
+
+    let mut file = File::create(file_path)?;
+
+    for row_str in formatted_rows {
+        // Escribir la fila en el archivo seguido de un salto de línea
+        writeln!(file, "{}", row_str)?;
+    }
+
+    Ok(())
+}
+
+fn main() /*-> io::Result<()> */{
+    // Solicitar al usuario el número de filas y columnas
+    let m = 2046;
+    let n = 2430;
+
+    // Crear la matriz
+    let mut matriz: Vec<Vec<f32>> = crear_matriz(m, n);
+
+
+    //potencial positivo
+    for i in 0..m {
+
+        if i<=194{
+
+            for j  in 0..n{
+                matriz[i][j]= 3.5;
+            }
+        }
+
+        if 194<=i && i<=704{
+
+            for j  in 0..385{
+                matriz[i][j]= 3.5;
+            }
+
+            for j  in 1021..1404{
+                matriz[i][j]= 3.5;
+            }
+
+            for j  in 2040..n{
+                matriz[i][j]= 3.5;
+            }
+        }
+
+        if 704<=i && i<= 1340{
+            for j  in 0..385{
+                matriz[i][j]= 3.5;
+            }
+
+            for j  in 2040..n{
+                matriz[i][j]= 3.5;
+            }
+        }
+
+        if 1340<=i && i<= 1723{
+            for j  in 0..898{
+                matriz[i][j]= 3.5;
+            }
+
+            for j  in 1535..n{
+                matriz[i][j]= 3.5;
+            }
+        }
+    }
+
+    //potencial 0
+
+    for i in 0..m{
+
+        if 322<=i && i<=832{
+
+            for j in 512..894{
+                matriz[i][j]= 0.0;
+            }
+
+            for j in 1531..1913{
+                matriz[i][j]= 0.0;
+            }
+        }
+
+        if 832<=i && i<=1214{
+
+            for j in 512..1913{
+                matriz[i][j]= 0.0;
+            }
+        }
+
+        if 1214<=i && i<=1851{
+
+            for j in 1022..1405{
+                matriz[i][j]= 0.0;
+            }
+        }
+
+        if 1851<=i {
+
+            for j in 0..n{
+                matriz[i][j]= 0.0;
+            }
+        }
+
+    }
+
+    /*let nombre_archivo = "mi_archivo.txt";
+    let mut archivo = File::create(nombre_archivo)?;
+
+    // Escribir los elementos de la matriz en el archivo
+    for fila in &matriz {
+        for &elemento in fila {
+            write!(archivo, "{:.2} ", elemento)?;
+        }
+        writeln!(archivo)?;
+    }
+
+    println!("Matriz exportada exitosamente en {}", nombre_archivo);
+
+    Ok(())*/
+
+    // Llamar a la función para escribir en el archivo de manera paralela
+    if let Err(e) = write_matrix_to_file_parallel(&mut matriz, "output.txt") {
+        eprintln!("Error al escribir en el archivo: {}", e);
+    } else {
+        println!("Datos escritos exitosamente en el archivo.");
+    }
+
+}
+
+
+
+// Función para crear una matriz de m filas por n columnas
+fn crear_matriz(m: usize, n: usize) -> Vec<Vec<f32>> {
+    let mut matriz = Vec::with_capacity(m);
+
+    for _ in 0..m {
+        let fila: Vec<f32> = vec![1.75; n];
+        matriz.push(fila);
+    }
+
+    matriz
+}
+
+// Función para imprimir una matriz
+fn imprimir_matriz(matriz: &Vec<Vec<f32>>) {
+    println!("Matriz:");
+
+    for fila in matriz {
+        for &elemento in fila {
+            print!("{} ", elemento);
+        }
+        println!();
     }
 }
