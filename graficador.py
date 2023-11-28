@@ -53,3 +53,19 @@ plt.title('Heatmap from Text File')
 plt.show()
 
 
+ruta_archivo = 'carga.txt'
+rho = archivo_texto_a_matriz(ruta_archivo)
+
+print("Matriz:")
+print(rho)
+
+plt.figure(figsize=(8, 6))
+#plt.contourf(m1, 100, cmap='inferno')
+plt.contour(rho, 8, cmap='inferno')
+plt.colorbar(label='Dencidad de carga  [C/cm]')
+plt.title('Potencial eléctrico con círculo interno y marco externo')
+plt.xlabel('x [cm]')
+plt.ylabel('y [cm]')
+plt.savefig('potcirc.jpg', dpi=500)
+plt.show()
+
