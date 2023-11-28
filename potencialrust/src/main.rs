@@ -117,6 +117,8 @@ use std::fs::File;
 use std::io::{self, Write};
 use rayon::prelude::*;
 
+const MAX_ITER :usize = 1000;
+
 fn write_matrix_to_file_parallel(matrix: &mut Vec<Vec<f32>>, file_path: &str) -> io::Result<()> {
     let formatted_rows: Vec<String> = matrix
         .par_iter_mut()
@@ -138,6 +140,25 @@ fn write_matrix_to_file_parallel(matrix: &mut Vec<Vec<f32>>, file_path: &str) ->
 
     Ok(())
 }
+
+fn cpotencial(matriz: &Vec<Vec<f32>>, i: usize, j: usize) -> f32 {
+    // Verificar que las filas y columnas necesarias estén presentes
+    let i_plus_1 = if i < matriz.len() - 1 { i + 1 } else { matriz.len() - 1 };
+    let i_minus_1 = if i >= 1 { i - 1 } else { 0 };
+    let i_minus_2 = if i >= 2 { i - 2 } else { 0 }; // Agregado para evitar desbordamiento
+    let j_plus_1 = if j < matriz[0].len() - 1 { j + 1 } else { matriz[0].len() - 1 };
+    let j_minus_1 = if j >= 1 { j - 1 } else { 0 };
+
+    let potencial = (
+        -matriz[i + 2][j] - matriz[i][j + 2] +
+        16.0 * matriz[i + 1][j] + 16.0 * matriz[i][j + 1] +
+        16.0 * matriz[i_minus_1][j] + 16.0 * matriz[i][j_minus_1] -
+        matriz[i_minus_1][j_minus_1] - matriz[i_minus_2][j]) / 60.0;
+
+    potencial
+}
+
+
 
 fn main() /*-> io::Result<()> */{
     // Solicitar al usuario el número de filas y columnas
@@ -232,6 +253,24 @@ fn main() /*-> io::Result<()> */{
 
     }
 
+    for _k in 0..MAX_ITER{
+        for i in 0..m{
+            
+            if i<= 195 && i<=321{
+
+                for j in 386 .. 1020{
+                    
+                    matriz[i][j]= cpotencial(&matriz, i, j);
+                }
+
+                for j in 1405 .. 2039{
+
+                    matriz[i][j]= cpotencial(&matriz, i, j);
+                }
+            }
+        }
+    }
+
     /*let nombre_archivo = "mi_archivo.txt";
     let mut archivo = File::create(nombre_archivo)?;
 
@@ -270,14 +309,3 @@ fn crear_matriz(m: usize, n: usize) -> Vec<Vec<f32>> {
     matriz
 }
 
-// Función para imprimir una matriz
-fn imprimir_matriz(matriz: &Vec<Vec<f32>>) {
-    println!("Matriz:");
-
-    for fila in matriz {
-        for &elemento in fila {
-            print!("{} ", elemento);
-        }
-        println!();
-    }
-}
