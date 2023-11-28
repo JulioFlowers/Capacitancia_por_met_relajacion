@@ -96,7 +96,7 @@ guardarArrayEnArchivo(N, M, phi, "miArchivo.txt");
  double rho[N][M];
 for (i = 1; i < N - 1; i++) {
         for (j = 1; j < M - 1; j++) {
-            rho=(Ey[i+1][j]-Ey[i-1][j])+(Ex[i][j+1]-Ex[i][j-1]);
+            rho[i][j]=(Ey[i+1][j]-Ey[i-1][j])+(Ex[i][j+1]-Ex[i][j-1]);
         }
     }
 guardarArrayEnArchivo(N, M, rho, "carga.txt");
