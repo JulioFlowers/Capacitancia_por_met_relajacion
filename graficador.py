@@ -59,7 +59,7 @@ x, y = np.meshgrid(np.arange(0, sub_phi.shape[1], 1), np.arange(0, sub_phi.shape
 
 # Grafica el campo eléctrico con quiver
 plt.figure(figsize=(8, 6))
-plt.streamplot(x, y, -Ex, -Ey,density=3)
+plt.streamplot( y, x, -Ey, -Ex,density=3)
 plt.axis=("scaled")
 plt.title('Campo eléctrico capacitor coplanar basado en curva de Hilbert [V/m]')
 plt.xlabel('x [µm]')
