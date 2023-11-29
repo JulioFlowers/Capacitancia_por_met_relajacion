@@ -25,7 +25,7 @@ m1 = archivo_texto_a_matriz(ruta_archivo)
 print("Matriz:")
 print(m1)
 
-"""
+
 [Ey,Ex] = np.gradient(m1)
 
 plt.figure(figsize=(8, 6))
@@ -51,7 +51,7 @@ plt.ylabel('Y-axis')
 # Display the plot
 plt.title('Heatmap from Text File')
 plt.show()
-
+"""
 
 ruta_archivo = 'carga.txt'
 rho = archivo_texto_a_matriz(ruta_archivo)

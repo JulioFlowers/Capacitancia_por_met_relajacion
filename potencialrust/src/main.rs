@@ -19,54 +19,6 @@ fn obtener_valores(matriz: &mut Vec<Vec<f32>>, valor_buscado: f32) -> Vec<(usize
     indices_a_cambiar
 }
 
-
-fn verificar_limites(matriz: &Vec<Vec<f32>>, i: usize, j: usize) -> bool {
-    let filas = matriz.len();
-
-    if filas == 0 {
-        return false; // Matriz vacía
-    }
-
-    let columnas = matriz[0].len();
-
-    let i_valido = i < filas;
-    let j_valido = j < columnas;
-
-    let i_menos_dos_valido = i >= 2;
-    let i_menos_uno_valido = i >= 1;
-    let i_mas_uno_valido = i + 1 < filas;
-    let i_mas_dos_valido = i + 2 < filas;
-
-    let j_menos_dos_valido = j >= 2;
-    let j_menos_uno_valido = j >= 1;
-    let j_mas_uno_valido = j + 1 < columnas;
-    let j_mas_dos_valido = j + 2 < columnas;
-
-    i_valido && j_valido &&
-        i_menos_dos_valido && i_menos_uno_valido &&
-        i_mas_uno_valido && i_mas_dos_valido &&
-        j_menos_dos_valido && j_menos_uno_valido &&
-        j_mas_uno_valido && j_mas_dos_valido
-}
-
-fn sumar_terminos(matriz: &Vec<Vec<f32>>, i: usize, j: usize) -> Option<f32> {
-    if verificar_limites(matriz, i, j) {
-        let resultado =  
-            - matriz[i - 2][j] 
-            - matriz[i][j - 2] 
-            + 16.0 * matriz[i - 1][j] 
-            + 16.0 * matriz[i][j - 1] 
-            +16.0 * matriz[i + 1][j] 
-            + 16.0 * matriz[i][j + 1] 
-            - 16.0 * matriz[i + 2][j] 
-            - matriz[i][j + 2];
-
-        Some(resultado)
-    } else {
-        None  // Índices fuera de los límites
-    }
-}
-
 fn write_matrix_to_file_parallel(matrix: &mut Vec<Vec<f32>>, file_path: &str) -> io::Result<()> {
     let formatted_rows: Vec<String> = matrix
         .par_iter_mut()
@@ -163,17 +115,23 @@ fn main() /*-> io::Result<()> */
     //obtener indices a iterar
     let indices = obtener_valores(&mut phi, 1.75);
 
-    for (i, j) in indices.clone() {
-        // Verificar que los índices estén dentro del rango de la matriz
-        if i < phi.len() && j < phi[0].len() {
-
-            match sumar_terminos(&phi, i, j) {
-                Some(resultado) => phi[i][j] = resultado,
-                None => println!("Índices fuera de los límites o matriz vacía."),
+    for _k in 0..MAX_ITER {
+        for (i, j) in indices.clone() {
+            // Verificar que los índices estén dentro del rango de la matriz
+            if i < phi.len() && j < phi[0].len() {
+                if i >= 2 && j >= 2 && i + 2 < phi.len() && j + 2 < phi[0].len() {
+                    phi[i][j] = (16.0 * phi[i - 1][j]
+                    + 16.0 * phi[i][j - 1]
+                    + 16.0 * phi[i + 1][j]
+                    + 16.0 * phi[i][j + 1]
+                    -phi[i - 2][j] 
+                    - phi[i][j - 2]
+                    - phi[i + 2][j]
+                    -phi[i][j + 2])/60.0;
+                }
+            } else {
+                println!("Índices ({}, {}) fuera de rango", i, j);
             }
-            
-        } else {
-            println!("Índices ({}, {}) fuera de rango", i, j);
         }
     }
 
