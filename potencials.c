@@ -3,7 +3,7 @@
 
 #define N 189
 #define M 247
-#define MAX_ITER 1000
+#define MAX_ITER 1000000
 #define TOL 1e-6
 
 // Función para guardar un array bidimensional en un archivo

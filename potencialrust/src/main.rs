@@ -121,17 +121,29 @@ fn main() /*-> io::Result<()> */
             if i < phi.len() && j < phi[0].len() {
                 if i >= 2 && j >= 2 && i + 2 < phi.len() && j + 2 < phi[0].len() {
                     phi[i][j] = (16.0 * phi[i - 1][j]
-                    + 16.0 * phi[i][j - 1]
-                    + 16.0 * phi[i + 1][j]
-                    + 16.0 * phi[i][j + 1]
-                    -phi[i - 2][j] 
-                    - phi[i][j - 2]
-                    - phi[i + 2][j]
-                    -phi[i][j + 2])/60.0;
+                        + 16.0 * phi[i][j - 1]
+                        + 16.0 * phi[i + 1][j]
+                        + 16.0 * phi[i][j + 1]
+                        - phi[i - 2][j]
+                        - phi[i][j - 2]
+                        - phi[i + 2][j]
+                        - phi[i][j + 2])
+                        / 60.0;
                 }
             } else {
                 println!("Índices ({}, {}) fuera de rango", i, j);
             }
+        }
+    }
+
+
+    let mut ex: Vec<Vec<f32>> = crear_matriz(m, n); // Componente x del campo eléctrico
+    let mut ey: Vec<Vec<f32>> = crear_matriz(m, n);// Componente y del campo eléctrico
+     
+    for i in 2..m - 2 {
+        for j in 2..n - 2 {
+            ex[i][j] = -(-phi[i + 2][j] + 16.0 * phi[i + 1][j] - 30.0* phi[i][j]  + 16.0 * phi[i - 1][j] - phi[i - 2][j]) / 12.0;
+            ey[i][j] = -(-phi[i][j + 2] + 16.0 * phi[i][j + 1] - 30.0* phi[i][j] + 16.0 * phi[i][j - 1] - phi[i][j - 2]) / 12.0;
         }
     }
 
@@ -141,6 +153,19 @@ fn main() /*-> io::Result<()> */
     } else {
         println!("Datos escritos exitosamente en el archivo.");
     }
+
+    if let Err(e) = write_matrix_to_file_parallel(&mut ex, "ex.txt") {
+        eprintln!("Error al escribir en el archivo: {}", e);
+    } else {
+        println!("Datos escritos exitosamente en el archivo.");
+    }
+
+    if let Err(e) = write_matrix_to_file_parallel(&mut ey, "ey.txt") {
+        eprintln!("Error al escribir en el archivo: {}", e);
+    } else {
+        println!("Datos escritos exitosamente en el archivo.");
+    }
+
 }
 
 // Función para crear una matriz de m filas por n columnas
