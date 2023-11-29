@@ -16,7 +16,7 @@ def archivo_texto_a_matriz(ruta_archivo):
         matriz = np.array(matriz)
 
     return matriz
-
+"""""
 # Ejemplo de uso
 ruta_archivo = 'potencialrust/output.txt'
 m1 = archivo_texto_a_matriz(ruta_archivo)
@@ -54,7 +54,7 @@ plt.xlabel('X-axis')
 plt.ylabel('Y-axis')
 plt.title('Vector Field')
 plt.show()
-"""
+
 
 # Create a heatmap using matplotlib
 plt.imshow(m1, cmap='viridis', interpolation='nearest')
@@ -67,9 +67,9 @@ plt.ylabel('Y-axis')
 # Display the plot
 plt.title('Heatmap from Text File')
 plt.show()
+"""
 
-
-ruta_archivo = 'carga.txt'
+ruta_archivo = 'cargax.txt'
 rho = archivo_texto_a_matriz(ruta_archivo)
 
 print("Matriz:")
@@ -84,4 +84,4 @@ plt.xlabel('x [cm]')
 plt.ylabel('y [cm]')
 plt.savefig('potcirc.jpg', dpi=500)
 plt.show()
-"""
+

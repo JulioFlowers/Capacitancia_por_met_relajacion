@@ -75,6 +75,26 @@ for(k=0; k<MAX_ITER ; k++){
 
 guardarArrayEnArchivo(N, M, phi, "miArchivo.txt");
 
+// Calcular el campo eléctrico
+    double Ex[N][M]; // Componente x del campo eléctrico
+    double Ey[N][M]; // Componente y del campo eléctrico
+    double dx = 1.0; // Espaciado en x
+    double dy = 1.0; // Espaciado en y
 
+    for (i = 1; i < N - 1; i++) {
+        for (j = 1; j < M - 1; j++) {
+            Ey[i][j] = -(phi[i + 1][j] - phi[i - 1][j]) / (2 * dx);
+            Ex[i][j] = -(phi[i][j + 1] - phi[i][j - 1]) / (2 * dy);
+        }
+    }
+
+// Se calcula la carga
+ double rhox[N][M];
+for (i = 1; i < N - 1; i++) {
+        for (j = 1; j < M - 1; j++) {
+            rhox[i][j]=(Ex[i][j+1]-Ex[i][j-1]);
+        }
+    }
+guardarArrayEnArchivo(N, M, rhox, "cargax.txt");
 return 0;
 }
