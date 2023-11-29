@@ -124,10 +124,10 @@ fn main() /*-> io::Result<()> */
                         + 16.0 * phi[i][j - 1]
                         + 16.0 * phi[i + 1][j]
                         + 16.0 * phi[i][j + 1]
-                        - phi[i - 2][j]
-                        - phi[i][j - 2]
-                        - phi[i + 2][j]
-                        - phi[i][j + 2])
+                        - 1.0 * phi[i - 2][j]
+                        - 1.0 * phi[i][j - 2]
+                        - 1.0 * phi[i + 2][j]
+                        - 1.0 * phi[i][j + 2])
                         / 60.0;
                 }
             } else {
@@ -136,16 +136,37 @@ fn main() /*-> io::Result<()> */
         }
     }
 
+    let mut ex: Vec<Vec<f32>> = crear_matriz(m - 4, n - 4); // Componente x del campo eléctrico
+    let mut ey: Vec<Vec<f32>> = crear_matriz(m - 4, n - 4); // Componente y del campo eléctrico
 
-    let mut ex: Vec<Vec<f32>> = crear_matriz(m, n); // Componente x del campo eléctrico
-    let mut ey: Vec<Vec<f32>> = crear_matriz(m, n);// Componente y del campo eléctrico
-     
-    for i in 2..m - 2 {
-        for j in 2..n - 2 {
-            ex[i][j] = -(-phi[i + 2][j] + 16.0 * phi[i + 1][j] - 30.0* phi[i][j]  + 16.0 * phi[i - 1][j] - phi[i - 2][j]) / 12.0;
-            ey[i][j] = -(-phi[i][j + 2] + 16.0 * phi[i][j + 1] - 30.0* phi[i][j] + 16.0 * phi[i][j - 1] - phi[i][j - 2]) / 12.0;
+    for i in 0..m - 4 {
+        let ip = i + 2;
+        for j in 0..n - 4 {
+            let jp = j + 2;
+            ey[i][j] = -1.0
+                * (-1.0 * phi[ip + 2][jp] + 16.0 * phi[ip + 1][jp] - 30.0 * phi[ip][jp]
+                    + 16.0 * phi[ip - 1][jp]
+                    - 1.0 * phi[ip - 2][jp])
+                / 12.0;
+            ex[i][j] = -1.0
+                * (-1.0 * phi[ip][jp + 2] + 16.0 * phi[ip][jp + 1] - 30.0 * phi[ip][jp]
+                    + 16.0 * phi[ip][jp - 1]
+                    - 1.0 * phi[i][jp - 2])
+                / 12.0;
         }
     }
+
+    let mut rho: Vec<Vec<f32>> = crear_matriz(m - 6, n - 6);
+
+    for i in 0..m - 6 {
+        for j in 0..n - 6 {
+            // Asegúrate de que los índices estén dentro de los límites antes de acceder a rho
+            if i + 1 < rho.len() && i >= 1 && j + 1 < rho[0].len() && j >= 1 {
+                rho[i][j] = (ey[i + 1][j] - ey[i - 1][j]) + (ex[i][j + 1] - ex[i][j - 1]);
+            } 
+        }
+    }
+    
 
     // Llamar a la función para escribir en el archivo de manera paralela
     if let Err(e) = write_matrix_to_file_parallel(&mut phi, "output.txt") {
@@ -166,6 +187,11 @@ fn main() /*-> io::Result<()> */
         println!("Datos escritos exitosamente en el archivo.");
     }
 
+    if let Err(e) = write_matrix_to_file_parallel(&mut rho, "carga.txt") {
+        eprintln!("Error al escribir en el archivo: {}", e);
+    } else {
+        println!("Datos escritos exitosamente en el archivo.");
+    }
 }
 
 // Función para crear una matriz de m filas por n columnas
