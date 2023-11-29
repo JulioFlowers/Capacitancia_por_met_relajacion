@@ -2,7 +2,7 @@ use rayon::prelude::*;
 use std::fs::File;
 use std::io::{self, Write};
 
-const MAX_ITER: usize = 1000;
+const MAX_ITER: usize = 10000;
 
 fn obtener_valores(matriz: &mut Vec<Vec<f32>>, valor_buscado: f32) -> Vec<(usize, usize)> {
     let mut indices_a_cambiar = Vec::new();
@@ -134,6 +134,8 @@ fn main() /*-> io::Result<()> */
                 println!("Índices ({}, {}) fuera de rango", i, j);
             }
         }
+
+        println!("Iteración n°: {}.", _k);
     }
 
     let mut ex: Vec<Vec<f32>> = crear_matriz(m - 4, n - 4); // Componente x del campo eléctrico
