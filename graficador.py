@@ -21,10 +21,11 @@ def archivo_texto_a_matriz(ruta_archivo):
 ruta_archivo = 'potencialrust/output.txt'
 m1 = archivo_texto_a_matriz(ruta_archivo)
 
-"""
+
 print("Matriz:")
 print(m1)
 
+"""
 [Ey,Ex] = np.gradient(m1)
 
 plt.figure(figsize=(8, 6))
@@ -37,7 +38,6 @@ plt.xlabel('x [cm]')
 plt.ylabel('y [cm]')
 plt.savefig('potcirc.jpg', dpi=500)
 plt.show()
-
 """
 
 # Create a heatmap using matplotlib

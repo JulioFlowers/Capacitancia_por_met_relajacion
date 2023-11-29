@@ -1,9 +1,71 @@
-
 use rayon::prelude::*;
 use std::fs::File;
 use std::io::{self, Write};
 
 const MAX_ITER: usize = 1000;
+
+fn obtener_valores(matriz: &mut Vec<Vec<f32>>, valor_buscado: f32) -> Vec<(usize, usize)> {
+    let mut indices_a_cambiar = Vec::new();
+
+    for (i, fila) in matriz.iter_mut().enumerate() {
+        for (j, valor) in fila.iter_mut().enumerate() {
+            if *valor == valor_buscado {
+                // Guardar los índices
+                indices_a_cambiar.push((i, j));
+            }
+        }
+    }
+
+    indices_a_cambiar
+}
+
+
+fn verificar_limites(matriz: &Vec<Vec<f32>>, i: usize, j: usize) -> bool {
+    let filas = matriz.len();
+
+    if filas == 0 {
+        return false; // Matriz vacía
+    }
+
+    let columnas = matriz[0].len();
+
+    let i_valido = i < filas;
+    let j_valido = j < columnas;
+
+    let i_menos_dos_valido = i >= 2;
+    let i_menos_uno_valido = i >= 1;
+    let i_mas_uno_valido = i + 1 < filas;
+    let i_mas_dos_valido = i + 2 < filas;
+
+    let j_menos_dos_valido = j >= 2;
+    let j_menos_uno_valido = j >= 1;
+    let j_mas_uno_valido = j + 1 < columnas;
+    let j_mas_dos_valido = j + 2 < columnas;
+
+    i_valido && j_valido &&
+        i_menos_dos_valido && i_menos_uno_valido &&
+        i_mas_uno_valido && i_mas_dos_valido &&
+        j_menos_dos_valido && j_menos_uno_valido &&
+        j_mas_uno_valido && j_mas_dos_valido
+}
+
+fn sumar_terminos(matriz: &Vec<Vec<f32>>, i: usize, j: usize) -> Option<f32> {
+    if verificar_limites(matriz, i, j) {
+        let resultado =  
+            - matriz[i - 2][j] 
+            - matriz[i][j - 2] 
+            + 16.0 * matriz[i - 1][j] 
+            + 16.0 * matriz[i][j - 1] 
+            +16.0 * matriz[i + 1][j] 
+            + 16.0 * matriz[i][j + 1] 
+            - 16.0 * matriz[i + 2][j] 
+            - matriz[i][j + 2];
+
+        Some(resultado)
+    } else {
+        None  // Índices fuera de los límites
+    }
+}
 
 fn write_matrix_to_file_parallel(matrix: &mut Vec<Vec<f32>>, file_path: &str) -> io::Result<()> {
     let formatted_rows: Vec<String> = matrix
@@ -27,34 +89,6 @@ fn write_matrix_to_file_parallel(matrix: &mut Vec<Vec<f32>>, file_path: &str) ->
     Ok(())
 }
 
-fn cpotencial(matriz: &Vec<Vec<f32>>, i: usize, j: usize) -> f32 {
-    // Verificar que las filas y columnas necesarias estén presentes
-    let i_plus_1 = if i < matriz.len() - 1 {
-        i + 1
-    } else {
-        matriz.len() - 1
-    };
-    let i_minus_1 = if i >= 1 { i - 1 } else { 0 };
-    let i_minus_2 = if i >= 2 { i - 2 } else { 0 }; // Agregado para evitar desbordamiento
-    let j_plus_1 = if j < matriz[0].len() - 1 {
-        j + 1
-    } else {
-        matriz[0].len() - 1
-    };
-    let j_minus_1 = if j >= 1 { j - 1 } else { 0 };
-
-    let potencial = (-matriz[i + 2][j] - matriz[i][j + 2]
-        + 16.0 * matriz[i + 1][j]
-        + 16.0 * matriz[i][j + 1]
-        + 16.0 * matriz[i_minus_1][j]
-        + 16.0 * matriz[i][j_minus_1]
-        - matriz[i_minus_1][j_minus_1]
-        - matriz[i_minus_2][j])
-        / 60.0;
-
-    potencial
-}
-
 fn main() /*-> io::Result<()> */
 {
     // Solicitar al usuario el número de filas y columnas
@@ -65,13 +99,13 @@ fn main() /*-> io::Result<()> */
     let mut phi: Vec<Vec<f32>> = crear_matriz(m, n);
 
     //potencial positivo
-    for i in 0..m {
+    for i in 2..m - 2 {
         if (0..=194).contains(&i) {
             for j in 0..n {
                 phi[i][j] = 3.5;
             }
         }
-    
+
         if (194..=704).contains(&i) {
             for range in [(0..385), (1021..1404), (2040..n)] {
                 for j in range {
@@ -79,7 +113,7 @@ fn main() /*-> io::Result<()> */
                 }
             }
         }
-    
+
         if (704..=1340).contains(&i) {
             for range in [(0..385), (2040..n)] {
                 for j in range {
@@ -87,7 +121,7 @@ fn main() /*-> io::Result<()> */
                 }
             }
         }
-    
+
         if (1340..=1723).contains(&i) {
             for range in [(0..898), (1535..n)] {
                 for j in range {
@@ -97,7 +131,6 @@ fn main() /*-> io::Result<()> */
         }
     }
 
-    
     //potencial 0
     for i in 0..m {
         if (322..=832).contains(&i) {
@@ -107,59 +140,42 @@ fn main() /*-> io::Result<()> */
                 }
             }
         }
-    
+
         if (832..=1214).contains(&i) {
             for j in 512..1913 {
                 phi[i][j] = 0.0;
             }
         }
-    
+
         if (1214..=1851).contains(&i) {
             for j in 1022..1405 {
                 phi[i][j] = 0.0;
             }
         }
-    
+
         if i >= 1851 {
             for j in 0..n {
                 phi[i][j] = 0.0;
             }
         }
     }
-    
-/* 
-    for _k in 0..MAX_ITER {
-        for i in 0..m {
-            if i <= 195 && i <= 321 {
-                for j in 386..1020 {
-                    matriz[i][j] = cpotencial(&matriz, i, j);
-                }
 
-                for j in 1405..2039 {
-                    matriz[i][j] = cpotencial(&matriz, i, j);
-                }
+    //obtener indices a iterar
+    let indices = obtener_valores(&mut phi, 1.75);
+
+    for (i, j) in indices.clone() {
+        // Verificar que los índices estén dentro del rango de la matriz
+        if i < phi.len() && j < phi[0].len() {
+
+            match sumar_terminos(&phi, i, j) {
+                Some(resultado) => phi[i][j] = resultado,
+                None => println!("Índices fuera de los límites o matriz vacía."),
             }
-
-            if i <= 321 && i <= 705 {
-                for j in 386..512 {
-                    matriz[i][j] = cpotencial(&matriz, i, j);
-                }
-
-                for j in 896..1022 {
-                    matriz[i][j] = cpotencial(&matriz, i, j);
-                }
-
-                for j in 1407..1532 {
-                    matriz[i][j] = cpotencial(&matriz, i, j);
-                }
-
-                for j in 1916..2041 {
-                    matriz[i][j] = cpotencial(&matriz, i, j);
-                }
-            }
+            
+        } else {
+            println!("Índices ({}, {}) fuera de rango", i, j);
         }
     }
-    */
 
     // Llamar a la función para escribir en el archivo de manera paralela
     if let Err(e) = write_matrix_to_file_parallel(&mut phi, "output.txt") {
