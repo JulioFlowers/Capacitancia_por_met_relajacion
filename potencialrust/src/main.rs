@@ -279,17 +279,28 @@ fn main()
         }
     }
 
-    let mut rho: Vec<Vec<f32>> = crear_matriz(m - 6, n - 6);
+    let mut rhoex: Vec<Vec<f32>> = crear_matriz(m - 6, n - 6);
 
     for i in 0..m - 6 {
         for j in 0..n - 6 {
             // Asegúramos que los índices estén dentro de los límites antes de acceder a rho
-            if i + 1 < rho.len() && i >= 1 && j + 1 < rho[0].len() && j >= 1 {
-                rho[i][j] = (ey[i + 1][j] - ey[i - 1][j]) + (ex[i][j + 1] - ex[i][j - 1]);
-            } 
+            if i + 1 < rhoex.len() && i >= 1 && j + 1 < rhoex[0].len() && j >= 1 {
+                rhoex[i][j] = (ey[i + 1][j] - ey[i - 1][j]) + (ex[i+1][j] - ex[i-1][j]);
+            }  
         }
     }
-    
+
+
+    let mut rhoey: Vec<Vec<f32>> = crear_matriz(m - 6, n - 6);
+
+    for i in 0..m - 6 {
+        for j in 0..n - 6 {
+            // Asegúramos que los índices estén dentro de los límites antes de acceder a rho
+            if i + 1 < rhoex.len() && i >= 1 && j + 1 < rhoex[0].len() && j >= 1 {
+                rhoey[i][j] = (ey[i][j+1] - ey[i][j-1]) + (ex[i][j+1] - ex[i][j-1]);
+            }  
+        }
+    }
 
     // Llamar a la función para escribir en el archivo de manera paralela y checar si no hay error
     if let Err(e) = write_matrix_to_file_parallel(&mut phi, "output.txt") {
@@ -310,11 +321,18 @@ fn main()
         println!("Datos escritos exitosamente en el archivo.");
     }
 
-    if let Err(e) = write_matrix_to_file_parallel(&mut rho, "carga.txt") {
+    if let Err(e) = write_matrix_to_file_parallel(&mut rhoex, "cargax.txt") {
         eprintln!("Error al escribir en el archivo: {}", e);
     } else {
         println!("Datos escritos exitosamente en el archivo.");
     }
+
+    if let Err(e) = write_matrix_to_file_parallel(&mut rhoey, "cargay.txt") {
+        eprintln!("Error al escrib23ir en el archivo: {}", e);
+    } else {
+        println!("Datos escritos exitosamente en el archivo.");
+    }
+
 }
 
 

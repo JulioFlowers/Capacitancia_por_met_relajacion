@@ -95,15 +95,30 @@ plt.show()
 """
 
 
-rutacarga = 'potencialrust/carga.txt'
+rutacarga = 'potencialrust/cargax.txt'
 Q = archivo_texto_a_matriz(rutacarga)
 plt.figure(figsize=(8, 6))
 #plt.contourf(rho, 100, cmap='inferno')
-plt.contour(Q, 8, cmap='inferno')
-#plt.imshow(Q, cmap='coolwarm', interpolation='nearest')
+#plt.contour(Q, 8, cmap='inferno')
+plt.imshow(Q, cmap='viridis', interpolation='nearest')
 plt.colorbar(label='Potencial eléctrico [V]')
 #plt.quiver(-Ex,-Ey,scale=5)
-plt.title('Potencial eléctrico capacitor coplanar basado en curva de Hilbert')
+plt.title('Carga en X, capacitor coplanar basado en curva de Hilbert')
+plt.xlabel('x [µm]')
+plt.ylabel('y [µm]')
+plt.savefig('carhilheat.jpg', dpi=500)
+plt.show()
+
+
+rutacarga = 'potencialrust/cargay.txt'
+Q = archivo_texto_a_matriz(rutacarga)
+plt.figure(figsize=(8, 6))
+#plt.contourf(rho, 100, cmap='inferno')
+#plt.contour(Q, 8, cmap='inferno')
+plt.imshow(Q, cmap='viridis', interpolation='nearest')
+plt.colorbar(label='Potencial eléctrico [V]')
+#plt.quiver(-Ex,-Ey,scale=5)
+plt.title('Carga en Y, capacitor coplanar basado en curva de Hilbert')
 plt.xlabel('x [µm]')
 plt.ylabel('y [µm]')
 plt.savefig('carhilheat.jpg', dpi=500)
