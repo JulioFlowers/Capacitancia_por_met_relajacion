@@ -3,7 +3,7 @@
 
 #define N 189
 #define M 247
-#define MAX_ITER 1000000
+#define MAX_ITER 1000
 #define TOL 1e-6
 
 // Función para guardar un array bidimensional en un archivo
@@ -28,7 +28,7 @@ void guardarArrayEnArchivo(int filas, int columnas, double array[filas][columnas
 
 
 
-void main() {
+int main() {
 
 double phi[N][M];
 double phinuevo[N][M];
@@ -43,7 +43,7 @@ for (i = 0; i < N; i++) {
             phi[i][j]= 3.2;      // Voltajes positivos
             }
             else if (i>2*esp && i<= N-(3*esp+cuad)&& j> (cuad + esp) && j<= (2*cuad + esp)|| i>2*esp && i<= N-(3*esp+cuad) && j<= M-(cuad + esp)  && j> M-(2*cuad + esp) || i > 3*esp+cuad && i<= N-3*esp-cuad && j>cuad+esp && j<=M-cuad-esp ||i> N-3*esp-cuad && j>2*(esp+cuad) && j<=M-2*(esp+cuad)||i>= N - esp ){
-                  phi[i][j]=0.0;       // Voltajes negativos
+                  phi[i][j]=-3.2;       // Voltajes negativos
             }
             else {  
                 phi[i][j]=1.6;
@@ -78,29 +78,17 @@ guardarArrayEnArchivo(N, M, phi, "miArchivo.txt");
 
 
 
-
-// Calcular el campo eléctrico
-    double Ex[N][M]; // Componente x del campo eléctrico
-    double Ey[N][M]; // Componente y del campo eléctrico
-    double dx = 1.0; // Espaciado en x
-    double dy = 1.0; // Espaciado en y
-
-    for (i = 1; i < N - 1; i++) {
-        for (j = 1; j < M - 1; j++) {
-            Ey[i][j] = -(phi[i + 1][j] - phi[i - 1][j]) / (2 * dx);
-            Ex[i][j] = -(phi[i][j + 1] - phi[i][j - 1]) / (2 * dy);
-        }
-    }
-
 // Se calcula la carga
  double rho[N][M];
 for (i = 1; i < N - 1; i++) {
         for (j = 1; j < M - 1; j++) {
-            rho[i][j]=(Ey[i+1][j]-Ey[i-1][j])+(Ex[i][j+1]-Ex[i][j-1]);
+            rho[i][j]=(phi[i][j+1]+phi[i][j-1]+phi[i-1][j]+phi[i+1][j]-4*phi[i][j])*(-1)/2;
+            if(rho[i][j]<0){
+                rho[i][j]= rho[i][j]*100;
+            }
         }
     }
-guardarArrayEnArchivo(N, M, rho, "carga.txt");
-
+guardarArrayEnArchivo(N, M, rho, "cargaprueba.txt");
 
 return 0;
 }
