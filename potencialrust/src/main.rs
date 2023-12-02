@@ -23,10 +23,53 @@ use std::fs::File; //elemento de la libreria estandar de Rust que accesa rutas d
 use std::io::{self, Write}; //metodo escribir sobre objeto de la libreria estandar de Rust
 
 //numero maximo de iteraciones
-const MAX_ITER: usize = 1000;
+const MAX_ITER: usize = 5000;
 
 //Declaración de nuestras funciones
 //-------------------------------------------------------------------------------------------------
+
+fn copiar_matriz_a_vector(matriz: &Vec<Vec<f32>>, indices: &Vec<(usize, usize)>) -> Vec<f32> {
+    let mut resultado = Vec::new();
+
+    for &(fila, columna) in indices {
+        if let Some(fila_matriz) = matriz.get(fila) {
+            if let Some(valor) = fila_matriz.get(columna) {
+                resultado.push(*valor);
+            } else {
+                panic!("Índices de columna fuera de rango en la fila {}", fila);
+            }
+        } else {
+            panic!("Índice de fila fuera de rango: {}", fila);
+        }
+    }
+
+    resultado
+}
+
+fn restar_vectores(a: &Vec<f32>, b: &Vec<f32>) -> Vec<f32> {
+    if a.len() != b.len() {
+        panic!("Los vectores deben tener la misma longitud para realizar la resta.");
+    }
+
+    let mut resultado = Vec::with_capacity(a.len());
+
+    for i in 0..a.len() {
+        resultado.push(a[i] - b[i]);
+    }
+
+    resultado
+}
+
+fn obtener_promedio(arr:&Vec<f32>) -> Option<f32> {
+    let longitud = arr.len();
+
+    if longitud == 0 {
+        None // No se puede calcular el promedio de un array vacío
+    } else {
+        let suma: f32 = arr.iter().sum();
+        Some(suma / (longitud as f32))
+    }
+}
 
 /*  Función para crear una matriz de m filas por n columnas con todos sus elementos valiendo 1.75.
 Este constructor usa la estructura vector de vectores */
@@ -205,7 +248,7 @@ fn main() {
     let indices = obtener_valores(&mut phi, 1.75);
 
     //iteraciones del metodo
-    for _k in 0..MAX_ITER {
+   for _k in 1..MAX_ITER {
         /* Como la coleccion de parejas ordenadas que obtuvimos en la sección anterior no es
         accesible para operar en este ciclo las clonamos (supongo que hay una forma mas optima
         de pasarlas al scope) pero se itera sobre esa colección de puntos
@@ -215,6 +258,7 @@ fn main() {
         condición y evalue el nuevo valor de phi (checar foto del desgloze de la solución de la
         ecuación de laplace en la foto))*/
 
+        let phiant=copiar_matriz_a_vector(&phi, &indices);
         for (i, j) in &indices {
             // Verificar que los índices estén dentro del rango de la matriz
             if *i < phi.len() && *j < phi[0].len() {
@@ -232,7 +276,16 @@ fn main() {
             }
         }
 
-        println!("Iteración n°: {}.", _k);
+         let tol = match obtener_promedio(&restar_vectores(&copiar_matriz_a_vector(&phi, &indices), &phiant)) {
+            Some(mean) => mean.abs(),
+            None => {
+                eprintln!("Error calculating mean. Exiting.");
+                return;
+            }
+        };
+        
+        println!("Iteración n°: {}, tol: {}.", _k,tol);
+        
     }
 
     /*hacemos las matrices de las componentes en x y Y del campo electrico de nuevo de la matriz de potencial hay
@@ -271,11 +324,12 @@ fn main() {
     
     let mut qp: f32=0.0;
     let mut qn : f32=0.0;
-    
+    let mut phip: Vec<Vec<f32>> = crear_matriz(m, n, 0.0);
+
     for i in 1..m{
         for j in 1..n{
             if i >= 2 && j >= 2 && i + 2 < phi.len() && j + 2 < phi[0].len() {
-                let phip = (16.0 * phi[i - 1][j]
+                let res = (16.0 * phi[i - 1][j]
                     + 16.0 * phi[i][j - 1]
                     + 16.0 * phi[i + 1][j]
                     + 16.0 * phi[i][j + 1]
@@ -286,11 +340,13 @@ fn main() {
                     - 1.0 * phi[i][j + 2])
                     /12.0;
 
-                if phip>0.0{
-                    qp=qp+phip;
+                phip[i][j]=res;
+
+                if res>0.0{
+                    qp=qp+res;
                 }
-                else if phip<0.0 {
-                    qn=qn+phip;
+                else if res<0.0 {
+                    qn=qn+res;
                 }
             }
         }
@@ -313,6 +369,12 @@ fn main() {
     }
 
     if let Err(e) = write_matrix_to_file_parallel(&mut ey, "ey.txt") {
+        eprintln!("Error al escribir en el archivo: {}", e);
+    } else {
+        println!("Datos escritos exitosamente en el archivo.");
+    }
+
+    if let Err(e) = write_matrix_to_file_parallel(&mut phip, "phip.txt") {
         eprintln!("Error al escribir en el archivo: {}", e);
     } else {
         println!("Datos escritos exitosamente en el archivo.");
