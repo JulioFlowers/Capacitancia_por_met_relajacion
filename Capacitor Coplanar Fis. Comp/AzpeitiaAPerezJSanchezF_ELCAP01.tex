@@ -1,0 +1,182 @@
+\documentclass[a4paper,11pt]{extarticle} %este tipo de doc ofrece más tamaños de letra
+
+\usepackage[utf8]{inputenc}%codificación
+\usepackage{csquotes}
+\usepackage[spanish, mexico]{babel}%Paquete de caracteres y títulos en español de méxico
+
+\usepackage{amsmath, mathtools}%Paquete para insertar símbolos matemáticos
+\usepackage{amsbsy}
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[mathcal]{eucal}
+\DeclareSymbolFont{usualmathcal}{OMS}{cmsy}{m}{n}
+\DeclareSymbolFontAlphabet{\mathcal}{usualmathcal}
+
+\usepackage{textcomp}
+\usepackage{textcomp,gensymb}
+
+\usepackage[table,xcdraw, dvipsnames]{xcolor}
+
+\usepackage{fontenc}
+
+\usepackage[bottom]{
+footmisc}
+
+\usepackage[shortlabels]{enumitem}
+
+\usepackage[tmargin= 2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm]{geometry}
+
+%estos son para tablas y figuras
+\usepackage{float}%Paquete para tratar figuras y tablas como flotantes
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage{svg}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{physics}
+
+\usepackage{listings}
+
+
+\usepackage{verbatim}%comentarios en bloque
+
+\captionsetup{font=footnotesize,labelfont=footnotesize} % hace al caption mas chiquito
+
+%convierte los cuadros del caption en tablas
+\renewcommand{\listtablename}{Índice de tablas}
+\renewcommand{\tablename}{Tabla}
+
+% si quieren usar alfabeto griego sin entrar en mathmode
+\usepackage{textgreek}
+
+\usepackage{adjustbox} % para ajustar tablas
+
+\usepackage{url}%Paquete para insertar URL's
+\usepackage{hyperref}
+
+\usepackage{multicol}%Paquete para crear ambientes multicolumna
+\setlength\columnsep{24pt}%Especifíca separación de las columnas
+
+%este es para la bibliografía yo uso ieee pero se puede cambiar
+\usepackage[
+backend=biber,
+bibencoding=utf8,
+style=ieee,
+sorting=none
+]{biblatex}
+\addbibresource{citas.bib}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+% otros nuevos comandos personalizados.
+%\newcommand{\dbar} {\ensuremath{\,\mathchar'26\mkern-12mu d}}
+
+ \newcommand
+{\cita}[1]{\textsuperscript{\textbf{\cite{#1}}}} % este es para que la cita se vea en superíndice para ieee, si usan otro formato bórrenlo
+ \newcommand{\ut}
+[1]{\textbf{#1}} %les hace escribir menos si quieren poner negritas en texto y mate
+ \newcommand{\um}[1]{\boldsymbol{#1}}
+ \renewcommand{\thefootnote}{\Roman{footnote}} %los pie de pagina los pone en letras romanas
+ \newcommand{\dbar}{\text{\dj}}
+ \newcommand{\parentesis}[1]{\left(#1\right)}
+ \newcommand{\crch}[1]{\left[#1\right]}
+ 
+\begin{document}
+
+\begin{center}
+
+	%------------------------------------------------------------------------------------------------------------------------
+	% TITULO
+	%------------------------------------------------------------------------------------------------------------------------
+
+	\large{\textbf{En búsqueda de la capacitancia del Hilbertrón, un viaje por el método de relajación con ansiedad (diferencias finitas 
+         centradas de cuarto orden).}}
+
+	\vspace{-\baselineskip}
+
+	\vspace{0.45em}
+
+	%------------------------------------------------------------------------------------------------------------------------
+	% INFO CONTACTO
+	%------------------------------------------------------------------------------------------------------------------------
+	\begin{multicols}{2}
+		\begin{center}
+                \small{\noindent \textbf {Azpeítia Arias, Ángel Alejandro.}\linebreak
+				\noindent \textit{\href{mailto:alejandroazp@ciencias.unam.mx}{alejandroazp@ciencias.unam.mx}}}
+		
+		\end{center}
+		\columnbreak
+		\begin{center}
+                \small{\noindent \textbf{ Pérez Flores, Julio Alfonso.}\linebreak
+				\noindent \textit{\href{mailto:julio_ perez@ciencias.unam.mx}{julio\textunderscore perez@ciencias.unam.mx}}}
+	
+		\end{center}
+	\end{multicols}
+
+	\vspace{-\baselineskip}
+	\vspace{0.35em}
+
+	\textit{\small{Facultad de Ciencias, Universidad Nacional Autónoma de México. }}
+
+	\small{01 Diciembre, 2023.}
+
+\end{center}
+
+%------------------------------------------------------------------------------------------------------------------------
+% RESUMEN
+%------------------------------------------------------------------------------------------------------------------------
+{\noindent \Large\ut{Resumen.}}
+
+\vspace{0.35em}
+
+\input{secciones/resumen.tex}
+
+\begin{multicols}{2}
+	%------------------------------------------------------------------------------------------------------------------------
+	% INTRDODUCCIÓN
+	%------------------------------------------------------------------------------------------------------------------------
+	\section{Introducción.}
+
+	\input{secciones/intro.tex}
+
+	
+
+	%------------------------------------------------------------------------------------------------------------------------
+	% MÉTODO
+	%------------------------------------------------------------------------------------------------------------------------
+	\section{Método.}
+
+	\input{secciones/met.tex}
+
+	%------------------------------------------------------------------------------------------------------------------------
+	\section{Resultados y Discución.}
+
+	\input{secciones/resdiscus}
+
+	%------------------------------------------------------------------------------------------------------------------------
+	% CONCLUSIONES.
+	%------------------------------------------------------------------------------------------------------------------------
+	\section{Conclusiones.}
+
+	\input{secciones/conclusiones.tex}
+
+	%------------------------------------------------------------------------------------------------------------------------
+	% REFERENCIAS.
+	%------------------------------------------------------------------------------------------------------------------------
+	\printbibliography[title={Referencias.}]
+
+\end{multicols}
+
+
+%------------------------------------------------------------------------------------------------------------------------
+% APENDICES.
+%------------------------------------------------------------------------------------------------------------------------
+{\large \textbf{Apéndice A.}}
+\input{secciones/apendiceA.tex}
+\end{document}
+
+
+
+

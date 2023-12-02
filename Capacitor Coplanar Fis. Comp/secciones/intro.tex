@@ -1,0 +1,133 @@
+\subsection{State of Art}
+{\color{Mulberry} Se presenta la importancia del condensador coplanar para diferentes técnicas, desde el uso como interfaz de usuario, hasta para el sondeo en técnicas no destructivas y la medición de humedad en medios que no pueden ser contaminados, ni medibles por sistemas ópticos.
+
+\vspace{\baselineskip}
+
+Se muestra las limitaciones de los condensadores coplanares de dos  tiras e interdigitales, y se introduce el interés del equipo de investigación por desarrollar un condensador coplanar con una mayor cantidad de área colindante entre electrodos. }
+
+\subsection{Objetivos}
+
+{\begin{itemize} [label=\textcolor{Mulberry}{\textbullet}]
+    \item { \color{Mulberry} Que es un condensador coplanar, factores que influyen en el diseño de un condensador coplanar}
+    \item {\color{Mulberry} Que es una curva de Hilbert }
+\end{itemize}}
+
+Para obtener la capacitancia, se necesita calcular la carga en el dispositivo.
+Se sabe que las cargas eléctricas generan campos eléctricos y magnéticos, que cumplen las cuatro ecuaciones de Maxwell, una de ellas es la ley de Gauss.
+\\
+\begin{equation}
+    \nabla \cdot \Vec{E} =\frac{\rho_{total}}{\epsilon_0}
+\end{equation}
+
+Además, para el caso electrostático (las cargas no se mueven), se cumple la igualdad  $\Vec{E}=-\nabla\phi$, remplazando el campo eléctrico en la ley de Gauss se obtiene \ref{poisson} 
+\\
+\begin{equation}
+     \label{poisson}
+    \nabla^2 \phi =\frac{-\rho_{total}}{\epsilon_0}
+\end{equation}
+Y en una región del espacio donde no hay carga eléctrica, se llega a la ecuación  que es nombrada como ecuación de Laplace \ref{laplace}
+
+\begin{equation}
+\label{laplace}
+    \nabla^2 \phi =0
+\end{equation}
+
+\section{ Método numérico}
+
+Se sabe que por el teorema de existencia y unicidad, que la solución a una ecuación diferencial es única, por lo tanto si encontramos una solución que cumpla las condiciones de frontera es la única solución al problema. 
+
+\begin{equation}
+\label{partials}
+\nabla^2 \phi = \frac{\partial^2 \phi}{\parial y^2} + \frac{\partial^2 \phi}{\parial x^2} 
+\end{equation}
+
+%%\begin{equation}
+%%   \nabla^2 \phi(x,z) \approx \frac{\phi(x+h,z)+\phi(x-h,z)+\phi(x,z+h)+\phi(x,z-h)-4\phi(x,z)}{h^2}
+%%\end{equation} 
+
+
+
+La ecuación de Laplace puede ser aproximada por el método de relajación, que consiste en aproximar las segundas derivadas parciales por método de diferencias centrales de cuarto orden, como se muestra en la ecuación \ref{dfcco} y \ref{dfcco1}, análogamente para $y$. En la ecuacion \ref{partials} se sustituyen las derivadas centradas, por \ref{laplace} se igual a 0, despejando $\phi(x,y)$, se encuentra que  el valor de cada celda del mallado se aproxima con el promedio de sus cuatro vecinos además haciendo $h=1$ se obtiene \ref{aproxV}.
+
+
+
+
+\begin{equation}
+\label{dfcco1}
+\resizebox{.9\columnwidth }{!}{
+$\dv[2]{\phi}{x} \approx \frac{-\phi_{i+2}\ +\ 16\phi_{i+1}\ -\ 30\phi_{i}\ +\ 16\phi_{i-1} -\phi_{i-2} }{12h^{2}} $
+}
+\end{equation}
+\begin{equation}
+\label{dfcco}
+\resizebox{.9\columnwidth }{!}{
+$\dv[2]{\phi}{y} \approx \frac{-\phi_{j+2}\ +\ 16\phi_{j+1}\ -\ 30\phi_{j}\ +\ 16\phi_{j-1} -\phi_{j-2} }{12h^{2}} $
+}
+\end{equation}
+
+\noindent \small{donde $i+k\ =\ x_{i}+kh,\ j+k\ =\ x_{j}+kh $, con $x_{i}, x_{j}$ puntos  iniciales} 
+
+\vspace{\baselineskip}
+
+\begin{comment}
+
+\begin{equation}
+\label{aproxV}
+\resizebox{.9\columnwidth }{!}{
+$\phi(x,y) \approx \frac{(16 \phi(x - 1,y)
+                        + 16 \phi(x,y - 1)
+                        + 16 \phi(x + 1,y)
+                        + 16 \phi(x,y + 1)
+                        - \phi(x - 2,y)
+                        -  \phi(x,y - 2)
+                        - \phi(x + 2,y)
+                        - \phi(x,y + 2)
+                        }{60}$
+}
+\end{equation}
+
+
+
+
+\begin{equation}
+
+     \phi(x,y) \approx \frac{(16 \phi(x - 1,y)
+                        + 16 \phi(x,y - 1)
+                        + 16 \phi(x + 1,y)
+                        + 16 \phi(x,y + 1)
+                        - \phi(x - 2,y)
+                        -  \phi(x,y - 2)
+                        - \phi(x + 2,y)
+                        - \phi(x,y + 2)
+                        }{60}
+\end{equation} 
+\end{comment}
+
+
+
+Para calcular el campo eléctrico (por completes), se usa el método de diferencias centrales en cada componente del campo eléctrico partiendo de $\vec{E}=-\nabla \phi$
+
+\begin{equation}
+\label{E}
+\resizebox{.9\columnwidth }{!}{
+$\vec{E} \approx \left( -\frac{\phi(x+h,y)-\phi(x-h,y)}{2h},-\frac{\phi(x,y+h)-\phi(x,y-h)}{2h}\right) $
+}
+\end{equation}
+
+
+
+Como ya se tiene calculado el potencial en toda el área y sabiendo que la ecuación \ref{poisson} se cumple en toda región del espacio, nuevamente podemos aplicar diferencias finitas y llegar a la expresión \ref{carga}
+
+\begin{comment}
+   \begin{equation}
+\label{carga}
+ -\frac{\rho(x,y)}{\epsilon_0} \approx \frac{\phi(x+h,y)+\phi(x-h,z)+\phi(x,y+h)+\phi(x,y-h)-4\phi(x,y)}{h^2}
+\end{equation}  
+\end{comment}
+
+La capacitancia se define como $C=\frac{Q}{\Delta \phi}$, para calcular la carga total. Donde Q es la carga positiva, pues si la aproximación es buena, tendremos la misma cantidad de carga positiva y negativa. 
+
+\begin{equation}
+    \label{cargatotal}
+    Q = \int \rho(x,y) dxdy \approx \sum_i \sum_j \rho(i,j) 
+\end{equation}
