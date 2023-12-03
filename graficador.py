@@ -86,7 +86,7 @@ plt.axis("scaled")
 plt.title('Campo Electrico Normalizado [u.a]')
 plt.xlabel('x [1:10 µm]')
 plt.ylabel('y [1:10 µm]')
-plt.savefig('campovectorial.jpg', dpi=600)
+plt.savefig('campovectorialfull.jpg', dpi=600)
 plt.show()
 
 Ex_sub = Ex[::30,::30]
@@ -118,7 +118,7 @@ plt.show()
 
 rutacarga = 'potencialrust/phip.txt'
 Q = archivo_texto_a_matriz(rutacarga)
-Qn = Q[::50,::50]*8.8541878176e-12
+Qn = Q[::50,::50]
 
 nonzero_indices = np.nonzero(Qn)
 
@@ -134,6 +134,6 @@ plt.contour(x, y, Qn, levels=np.linspace(unique_nonzero_values.min(), unique_non
 plt.title('Distribución de Carga')
 plt.xlabel('x [1:50 µm]')
 plt.ylabel('y [1:50 µm]')
-plt.colorbar(label='Carga [C]')
+plt.colorbar(label='Carga [C/ε]')
 plt.savefig('carga.jpg', dpi=600)
 plt.show()

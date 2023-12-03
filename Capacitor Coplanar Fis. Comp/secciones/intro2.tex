@@ -1,0 +1,52 @@
+%%\begin{equation}
+%%   \nabla^2 \phi(x,z) \approx \frac{\phi(x+h,z)+\phi(x-h,z)+\phi(x,z+h)+\phi(x,z-h)-4\phi(x,z)}{h^2}
+%%\end{equation} 
+
+
+
+La ecuación de Laplace puede ser aproximada por el método de relajación, que consiste en aproximar las segundas derivadas parciales por método de diferencias centrales de cuarto orden, como se muestra en la ecuación \ref{dfcco} y \ref{dfcco1}, análogamente para $y$. En la ecuacion \ref{partials} se sustituyen las derivadas centradas, por \ref{laplace} se igual a 0, despejando $\phi(x,y)$, se encuentra que  el valor de cada celda del mallado se aproxima con el promedio de sus cuatro vecinos además haciendo $h=1$ se obtiene \ref{aproxV}.
+
+\begin{equation}
+\label{dfcco1}
+\resizebox{.9\columnwidth }{!}{
+$\dv[2]{\phi}{x} \approx \frac{-\phi_{i+2}\ +\ 16\phi_{i+1}\ -\ 30\phi_{i}\ +\ 16\phi_{i-1} -\phi_{i-2} }{12h^{2}} $
+}
+\end{equation}
+\begin{equation}
+\label{dfcco}
+\resizebox{.9\columnwidth }{!}{
+$\dv[2]{\phi}{y} \approx \frac{-\phi_{j+2}\ +\ 16\phi_{j+1}\ -\ 30\phi_{j}\ +\ 16\phi_{j-1} -\phi_{j-2} }{12h^{2}} $
+}
+\end{equation}
+
+\noindent \small{donde $i+k\ =\ x_{i}+kh,\ j+k\ =\ x_{j}+kh $, con $x_{i}, x_{j}$ puntos  iniciales} 
+
+\vspace{\baselineskip}
+
+
+Para calcular el campo eléctrico (por completes), se usa el método de diferencias centrales en cada componente del campo eléctrico partiendo de $\vec{E}=-\nabla \phi$
+
+\begin{equation}
+\label{E}
+\resizebox{.9\columnwidth }{!}{
+$\vec{E} \approx \left( -\frac{\phi(x+h,y)-\phi(x-h,y)}{2h},-\frac{\phi(x,y+h)-\phi(x,y-h)}{2h}\right) $
+}
+\end{equation}
+
+
+
+Como ya se tiene calculado el potencial en toda el área y sabiendo que la ecuación \ref{poisson} se cumple en toda región del espacio, nuevamente podemos aplicar diferencias finitas y llegar a la expresión \ref{carga}
+
+\begin{comment}
+   \begin{equation}
+\label{carga}
+ -\frac{\rho(x,y)}{\epsilon_0} \approx \frac{\phi(x+h,y)+\phi(x-h,z)+\phi(x,y+h)+\phi(x,y-h)-4\phi(x,y)}{h^2}
+\end{equation}  
+\end{comment}
+
+La capacitancia se define como $C=\frac{Q}{\Delta \phi}$, para calcular la carga total. Donde Q es la carga positiva, pues si la aproximación es buena, tendremos la misma cantidad de carga positiva y negativa. 
+
+\begin{equation}
+    \label{cargatotal}
+    Q = \int \rho(x,y) dxdy \approx \sum_i \sum_j \rho(i,j) 
+\end{equation}
