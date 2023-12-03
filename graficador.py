@@ -25,7 +25,7 @@ def archivo_texto_a_matriz(ruta_archivo):
     return matriz
 
 #Leer el ouput, almacenar phi y convertirlo en una matriz. 
-ruta_archivo = 'potencialrust/output.txt'
+ruta_archivo = 'output.txt'
 phi = archivo_texto_a_matriz(ruta_archivo)
 
 
@@ -34,6 +34,7 @@ print(phi)
 
 #se usan las matrices phi, Ex y Ey para generar las visualizaciones
 
+#Graficar potencial
 plt.figure(figsize=(8, 6))
 #plt.contourf(phi, 100, cmap='inferno')
 plt.contour(phi, 8, cmap='inferno')
@@ -58,8 +59,8 @@ plt.savefig('pothilheat.jpg', dpi=600)
 plt.show()
 
 
-file_path_x = Path(__file__).parent / 'potencialrust/ex.txt'
-file_path_y = Path(__file__).parent / 'potencialrust/ey.txt'
+file_path_x = Path(__file__).parent / 'ex.txt'
+file_path_y = Path(__file__).parent / 'ey.txt'
 
 Ex = np.loadtxt(file_path_x)
 Ey = np.loadtxt(file_path_y)
@@ -116,8 +117,8 @@ plt.ylabel('y [1:30 µm]')
 plt.savefig('campovectorial.jpg', dpi=600)
 plt.show()
 
-
-rutacarga = 'potencialrust/phip.txt'
+#Graficar densidad de carga
+rutacarga = 'phip.txt'
 Q = archivo_texto_a_matriz(rutacarga)
 Qn = Q[::50,::50]*(1/1e+6) #factor de escala para usar unidades del S.I
 
