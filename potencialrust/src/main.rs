@@ -353,7 +353,7 @@ fn main() {
     }
 
     let Q: Vec<(f32, f32)> = vec![(qp, qn)]; 
-    println!("{:?}", Q);
+    println!("Carga Positiva, Carga negativa [Pesos]: {:?}", Q);
 
     // Llamar a la función para escribir en el archivo de manera paralela y checar si no hay error
     if let Err(e) = write_matrix_to_file_parallel(&mut phi, "output.txt") {
