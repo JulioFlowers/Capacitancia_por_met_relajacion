@@ -104,39 +104,9 @@ fn obtener_valores(matriz: &mut Vec<Vec<f32>>, valor_buscado: f32) -> Vec<(usize
     indices_a_cambiar
 }
 
-/*Esta descripción sale directa de ChatGPT, porque le pedi esta funcion
-
+/*
 Esta función, llamada write_matrix_to_file_parallel, toma una matriz mutable de números de punto flotante (f32)
-y un camino de archivo (file_path), y escribe el contenido de la matriz en un archivo. Aquí está el desglose de la función:
-
-matrix.par_iter_mut(): Esto utiliza la función par_iter_mut() proporcionada por la biblioteca rayon para realizar una iteración
-paralela sobre las filas de la matriz. La iteración paralela permite procesar múltiples filas simultáneamente, lo que puede mejorar
-el rendimiento en sistemas con varios núcleos de CPU.
-
-.map(|row| { ... }): Para cada fila de la matriz, se ejecuta una función de mapeo que realiza las siguientes operaciones:
-
-row.iter_mut().map(|num| num.to_string()): Itera sobre los números de la fila y los convierte a cadenas de texto. Esto se hace
-utilizando iter_mut() para obtener iteradores mutables sobre los elementos de la fila y map(|num| num.to_string()) para convertir cada
-número a su representación de cadena.
-
-.collect::<Vec<String>>(): Recoge los resultados de la operación de mapeo en un vector de cadenas.
-
-.join("\t"): Utiliza el método join para unir las cadenas en una sola cadena, separando cada número por una tabulación ("\t").
-
-.collect(): Recoge los resultados de la iteración paralela en un vector de cadenas llamado formatted_rows.
-
-let mut file = File::create(file_path)?;: Abre un nuevo archivo en el camino especificado utilizando File::create().
-El operador ? se utiliza para manejar automáticamente los errores y devolver un error si la operación de apertura del archivo no tiene éxito.
-
-for row_str in formatted_rows { ... }: Itera sobre cada cadena formateada en formatted_rows.
-
-writeln!(file, "{}", row_str)?;: Escribe la cadena en el archivo seguido de un salto de línea utilizando writeln!.
- Nuevamente, el operador ? se utiliza para manejar automáticamente los errores.
-Ok(()): Después de escribir todas las filas en el archivo, la función devuelve Ok(()), indicando que la operación se realizó con éxito.
-
-En resumen, esta función utiliza la programación paralela para formatear y escribir las filas de una matriz en un archivo de manera eficiente,
-aprovechando la capacidad de procesamiento paralelo para mejorar el rendimiento en sistemas con múltiples núcleos de CPU.
-
+y un camino de archivo (file_path), y escribe el contenido de la matriz en un archivo, mediante escritura paralela. 
 */
 
 fn write_matrix_to_file_parallel(matrix: &mut Vec<Vec<f32>>, file_path: &str) -> io::Result<()> {
@@ -320,7 +290,10 @@ fn main() {
         }
     }
 
-    //let mut phip: Vec<Vec<f32>> = crear_matriz(m, n, 0.0); 
+    /*Lo que hace este segmento de código es realizar una iteración sobre todas las areas
+    del potencial calculado eléctrico aplica el laplaciano a cada elemento y discrepa si es
+    positivo o negativo para hacer una suma ponderada de la carga, posteriormente el valor
+    del laplaciano se guarda en una matriz de distribución de carga discreta. */
     
     let mut qp: f32=0.0;
     let mut qn : f32=0.0;
@@ -352,6 +325,7 @@ fn main() {
         }
     }
 
+    //imprimir los valores ponderados de la carga
     let Q: Vec<(f32, f32)> = vec![(qp, qn)]; 
     println!("Carga Positiva, Carga negativa [Pesos]: {:?}", Q);
 

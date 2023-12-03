@@ -119,7 +119,7 @@ plt.show()
 
 rutacarga = 'potencialrust/phip.txt'
 Q = archivo_texto_a_matriz(rutacarga)
-Qn = Q[::50,::50]
+Qn = Q[::50,::50]*(1/1e+6) #factor de escala para usar unidades del S.I
 
 nonzero_indices = np.nonzero(Qn)
 
