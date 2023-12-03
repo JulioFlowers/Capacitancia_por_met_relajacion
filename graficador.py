@@ -4,9 +4,9 @@ from pathlib import Path
 
 def normalize_matrix(matrix):
     matrix = np.array(matrix, dtype=float)
-    magnitudes = np.linalg.norm(matrix, axis=1)  # Calculate magnitudes along rows
+    magnitudes = np.linalg.norm(matrix, axis=1)  # Calcular magnitudes a lo largo de las filas
 
-    normalized_matrix = matrix / magnitudes[:, np.newaxis]  # Divide each row by its magnitude
+    normalized_matrix = matrix / magnitudes[:, np.newaxis]  # Divide cada fila por su magnitud
     return 100 * normalized_matrix
 
 def archivo_texto_a_matriz(ruta_archivo):
@@ -24,7 +24,7 @@ def archivo_texto_a_matriz(ruta_archivo):
 
     return matriz
 
-
+#Leer el ouput, almacenar phi y convertirlo en una matriz. 
 ruta_archivo = 'potencialrust/output.txt'
 phi = archivo_texto_a_matriz(ruta_archivo)
 
@@ -32,6 +32,7 @@ phi = archivo_texto_a_matriz(ruta_archivo)
 print("Matriz:")
 print(phi)
 
+#se usan las matrices phi, Ex y Ey para generar las visualizaciones
 
 plt.figure(figsize=(8, 6))
 #plt.contourf(phi, 100, cmap='inferno')
@@ -65,7 +66,7 @@ Ey = np.loadtxt(file_path_y)
 
 Ex_sub = Ex[::10,::10]
 Ey_sub = Ey[::10,::10]
-# Check the dimensions of U and V
+
 
 magnitude = np.sqrt(Ex_sub**2 + Ey_sub**2)
 
@@ -91,7 +92,7 @@ plt.show()
 
 Ex_sub = Ex[::30,::30]
 Ey_sub = Ey[::30,::30]
-# Check the dimensions of U and V
+
 
 magnitude = np.sqrt(Ex_sub**2 + Ey_sub**2)
 
@@ -122,14 +123,13 @@ Qn = Q[::50,::50]
 
 nonzero_indices = np.nonzero(Qn)
 
-# Extract non-zero values and their corresponding indices
+# Extraer los valores distintos de cero y sus índices correspondientes
 nonzero_values = Qn[nonzero_indices]
 
-# Create a meshgrid for the contour plot
+# Crear una malla para el gráfico de contornos
 x, y = np.meshgrid(range(Qn.shape[1]), range(Qn.shape[0]))
 
-
-unique_nonzero_values = np.unique(nonzero_values)# Create a contour plot
+unique_nonzero_values = np.unique(nonzero_values)# Crear el gráfico de contorno
 plt.contour(x, y, Qn, levels=np.linspace(unique_nonzero_values.min(), unique_nonzero_values.max(), len(unique_nonzero_values)), cmap='inferno')
 plt.title('Distribución de Carga')
 plt.xlabel('x [1:50 µm]')
