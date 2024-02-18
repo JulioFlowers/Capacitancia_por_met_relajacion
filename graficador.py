@@ -25,7 +25,7 @@ def archivo_texto_a_matriz(ruta_archivo):
     return matriz
 
 #Leer el ouput, almacenar phi y convertirlo en una matriz. 
-ruta_archivo = 'output.txt'
+ruta_archivo = 'Datos usados en el articulo/output.txt'
 phi = archivo_texto_a_matriz(ruta_archivo)
 
 
@@ -43,7 +43,7 @@ plt.colorbar(label='Potencial eléctrico [V]')
 plt.title('Lineas equipotenciales, capacitor coplanar basado en curva de Hilbert')
 plt.xlabel('x [µm]')
 plt.ylabel('y [µm]')
-plt.savefig('pothileq.jpg', dpi=600)
+plt.savefig('graficas/pothileq.jpg', dpi=600)
 plt.show()
 
 plt.figure(figsize=(8, 6))
@@ -55,12 +55,12 @@ plt.colorbar(label='Potencial eléctrico [V]')
 plt.title('Potencial eléctrico capacitor coplanar basado en curva de Hilbert')
 plt.xlabel('x [µm]')
 plt.ylabel('y [µm]')
-plt.savefig('pothilheat.jpg', dpi=600)
+plt.savefig('graficas/pothilheat.jpg', dpi=600)
 plt.show()
 
 
-file_path_x = Path(__file__).parent / 'ex.txt'
-file_path_y = Path(__file__).parent / 'ey.txt'
+file_path_x = Path(__file__).parent / 'Datos usados en el articulo/ex.txt'
+file_path_y = Path(__file__).parent / 'Datos usados en el articulo/ey.txt'
 
 Ex = np.loadtxt(file_path_x)
 Ey = np.loadtxt(file_path_y)
@@ -88,7 +88,7 @@ plt.axis("scaled")
 plt.title('Campo Electrico Normalizado [u.a]')
 plt.xlabel('x [1:10 µm]')
 plt.ylabel('y [1:10 µm]')
-plt.savefig('campovectorialfull.jpg', dpi=600)
+plt.savefig('graficas/campovectorialfull.jpg', dpi=600)
 plt.show()
 
 Ex_sub = Ex[::30,::30]
@@ -114,13 +114,13 @@ plt.axis("scaled")
 plt.title('Campo Electrico Normalizado [u.a]')
 plt.xlabel('x [1:30 µm]')
 plt.ylabel('y [1:30 µm]')
-plt.savefig('campovectorial.jpg', dpi=600)
+plt.savefig('graficas/campovectorial.jpg', dpi=600)
 plt.show()
 
 #Graficar densidad de carga
-rutacarga = 'phip.txt'
+rutacarga = 'Datos usados en el articulo/phip.txt'
 Q = archivo_texto_a_matriz(rutacarga)
-Qn = Q[::50,::50]*(1/1e+6) #factor de escala para usar unidades del S.I
+Qn = Q[::50,::50]
 
 nonzero_indices = np.nonzero(Qn)
 
@@ -136,5 +136,5 @@ plt.title('Distribución de Carga')
 plt.xlabel('x [1:50 µm]')
 plt.ylabel('y [1:50 µm]')
 plt.colorbar(label='Carga [C/ε]')
-plt.savefig('carga.jpg', dpi=600)
+plt.savefig('graficas/carga.jpg', dpi=600)
 plt.show()

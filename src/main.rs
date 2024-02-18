@@ -23,7 +23,7 @@ use std::fs::File; //elemento de la libreria estandar de Rust que accesa rutas d
 use std::io::{self, Write}; //metodo escribir sobre objeto de la libreria estandar de Rust
 
 //numero maximo de iteraciones
-const MAX_ITER: usize = 1000;
+const MAX_ITER: usize = 5000;
 
 //Declaración de nuestras funciones
 //-------------------------------------------------------------------------------------------------
@@ -298,7 +298,7 @@ fn main() {
     for i in 1..m{
         for j in 1..n{
             if i >= 2 && j >= 2 && i + 2 < phi.len() && j + 2 < phi[0].len() {
-                let res = (16.0 * phi[i - 1][j]
+                let res = (1.0/1e+6)*((16.0 * phi[i - 1][j]
                     + 16.0 * phi[i][j - 1]
                     + 16.0 * phi[i + 1][j]
                     + 16.0 * phi[i][j + 1]
@@ -307,9 +307,9 @@ fn main() {
                     - 1.0 * phi[i][j - 2]
                     - 1.0 * phi[i + 2][j]
                     - 1.0 * phi[i][j + 2])
-                    /12.0;
+                    /12.0); //# se agrego factor de escala para usar unidades del S.I
 
-                rho[i][j]=res;
+                rho[i][j]=res; 
 
                 if res>0.0{
                     qp=qp+res;
@@ -326,25 +326,25 @@ fn main() {
     println!("Carga Positiva, Carga negativa [Pesos]: {:?}", Q);
 
     // Llamar a la función para escribir en el archivo de manera paralela y checar si no hay error
-    if let Err(e) = write_matrix_to_file_parallel(&mut phi, "output.txt") {
+    if let Err(e) = write_matrix_to_file_parallel(&mut phi, "Datos usados en el articulo/output.txt") {
         eprintln!("Error al escribir en el archivo: {}", e);
     } else {
         println!("Datos escritos exitosamente en el archivo.");
     }
 
-    if let Err(e) = write_matrix_to_file_parallel(&mut ex, "ex.txt") {
+    if let Err(e) = write_matrix_to_file_parallel(&mut ex, "Datos usados en el articulo/ex.txt") {
         eprintln!("Error al escribir en el archivo: {}", e);
     } else {
         println!("Datos escritos exitosamente en el archivo.");
     }
 
-    if let Err(e) = write_matrix_to_file_parallel(&mut ey, "ey.txt") {
+    if let Err(e) = write_matrix_to_file_parallel(&mut ey, "Datos usados en el articulo/ey.txt") {
         eprintln!("Error al escribir en el archivo: {}", e);
     } else {
         println!("Datos escritos exitosamente en el archivo.");
     }
 
-    if let Err(e) = write_matrix_to_file_parallel(&mut rho, "phip.txt") {
+    if let Err(e) = write_matrix_to_file_parallel(&mut rho, "Datos usados en el articulo/rho.txt") {
         eprintln!("Error al escribir en el archivo: {}", e);
     } else {
         println!("Datos escritos exitosamente en el archivo.");
