@@ -23,7 +23,7 @@ use std::fs::File; //elemento de la libreria estandar de Rust que accesa rutas d
 use std::io::{self, Write}; //metodo escribir sobre objeto de la libreria estandar de Rust
 
 //numero maximo de iteraciones
-const MAX_ITER: usize = 5000;
+const MAX_ITER: usize = 1000;
 
 //Declaración de nuestras funciones
 //-------------------------------------------------------------------------------------------------
@@ -278,14 +278,10 @@ fn main() {
     for (i, j) in &indices {
         if *i >= 2 && *j >= 2 && *i + 2 < len_i && *j + 2 < len_j {
             ey[*i][*j] = -1.0
-                * (-1.0 * phi[*i + 2][*j] + 16.0 * phi[*i + 1][*j] - 30.0 * phi[*i][*j]
-                    + 16.0 * phi[*i - 1][*j]
-                    - 1.0 * phi[*i - 2][*j])
+                * (-1.0 * phi[*i + 2][*j] + 8.0 * phi[*i + 1][*j] - 8.0 * phi[*i - 1][*j] + phi[*i - 2][*j])
                 / 12.0;
             ex[*i][*j] = -1.0
-                * (-1.0 * phi[*i][*j + 2] + 16.0 * phi[*i][*j + 1] - 30.0 * phi[*i][*j]
-                    + 16.0 * phi[*i][*j - 1]
-                    - 1.0 * phi[*i][*j - 2])
+                * (-1.0 * phi[*i][*j + 2] + 8.0 * phi[*i][*j + 1] - 8.0 * phi[*i][*j - 1] + phi[*i][*j - 2])
                 / 12.0;
         }
     }
@@ -297,7 +293,7 @@ fn main() {
     
     let mut qp: f32=0.0;
     let mut qn : f32=0.0;
-    let mut phip: Vec<Vec<f32>> = crear_matriz(m, n, 0.0);
+    let mut rho: Vec<Vec<f32>> = crear_matriz(m, n, 0.0);
 
     for i in 1..m{
         for j in 1..n{
@@ -313,7 +309,7 @@ fn main() {
                     - 1.0 * phi[i][j + 2])
                     /12.0;
 
-                phip[i][j]=res;
+                rho[i][j]=res;
 
                 if res>0.0{
                     qp=qp+res;
@@ -348,7 +344,7 @@ fn main() {
         println!("Datos escritos exitosamente en el archivo.");
     }
 
-    if let Err(e) = write_matrix_to_file_parallel(&mut phip, "phip.txt") {
+    if let Err(e) = write_matrix_to_file_parallel(&mut rho, "phip.txt") {
         eprintln!("Error al escribir en el archivo: {}", e);
     } else {
         println!("Datos escritos exitosamente en el archivo.");

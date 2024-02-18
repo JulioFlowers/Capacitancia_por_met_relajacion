@@ -1,5 +1,5 @@
 .vscode
-./acapacitorrust/target
+/target
 *.class
 *.sm
 *.exe
